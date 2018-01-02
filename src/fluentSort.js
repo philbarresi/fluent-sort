@@ -57,7 +57,7 @@ class SortedIterable {
 
   result() {
     const resultArr = this.data.slice(0);
-    
+
     resultArr.sort(composeSort(this.sortComparators));
 
     return resultArr;
@@ -113,9 +113,7 @@ class Iterable {
 }
 
 const fluentSort = arr => {
-  if (!Array.isArray(arr)) {
-    throw new Error("fluentSort must be provided with an array");
-  }
+  checkArray(arr);
 
   return new Iterable(arr);
 };
