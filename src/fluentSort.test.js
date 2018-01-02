@@ -230,6 +230,22 @@ describe("error handling", () => {
     }).toThrow();
   });
 
+  test("throws when adding a thenBy when sortComparators is not an array", () => {
+    const tests = getTests();
+    const sortedTests = fluentSort(tests).sortBy((left, right) => {
+      if (left.id > right.id) return -1;
+      if (left.id < right.id) return 1;
+
+      return 0;
+    });
+
+    sortedTests.sortComparators = undefined;
+
+    expect(() => {
+      const sortedTestsThenBy = sortedTests.thenByField(x => x.agility);
+    }).toThrow();
+  });
+
   test("throws when generating a result when sortComparators is not an array", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests).sortBy((left, right) => {
@@ -240,23 +256,8 @@ describe("error handling", () => {
     });
 
     sortedTests.sortComparators = undefined;
+
     expect(() => {
-      const sortedTestsThenBy = sortedTests.thenByField(x => x.agility);
-    }).toThrow();
-  });
-
-  test("throws when generating a result when sortComparators is not an array", () => {
-    const tests = getTests();
-    expect(() => {
-      const sortedTests = fluentSort(tests).sortBy((left, right) => {
-        if (left.id > right.id) return -1;
-        if (left.id < right.id) return 1;
-
-        return 0;
-      });
-
-      sortedTests.sortComparators = undefined;
-
       sortedTests.result();
     }).toThrow();
   });
