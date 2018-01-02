@@ -150,6 +150,21 @@ describe("basic tests", () => {
 });
 
 describe("thenBy tests", () => {
+  test("sorting by intelligence ascending (by string) then by agility ascending (by string) results a the correct order", () => {
+    const tests = getTests();
+    const sortedTests = fluentSort(tests)
+      .sortByField("intelligence")
+      .thenByField("agility")
+      .result();
+
+    expect(sortedTests[0].name).toBe("Unimpressive Monster");
+    expect(sortedTests[1].name).toBe("Fast Monster");
+    expect(sortedTests[2].name).toBe("Slow Monster");
+    expect(sortedTests[3].name).toBe("Strong Monster");
+    expect(sortedTests[4].name).toBe("Mediocre Monster");
+    expect(sortedTests[5].name).toBe("Smart Monster");
+  });
+
   test("sorting by intelligence ascending then by agility ascending results a the correct order", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
