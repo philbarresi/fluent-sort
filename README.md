@@ -4,62 +4,7 @@
 
 `fluent-sort` is a compact, dependency-free library (less than 1kb) that provides a fluent, pure API for sorting JavaScript arrays.
 
-## API
-
-The API is a mostly pure, fluent API; all methods on Sorted Iterables will return new sorted iterables (with the exception of `.sortInPlace()`).
-
-### `const iterable = fluentSort(arr);`
-
-Returns a new Iterable, which is an unsorted wrapper around the array provided.
-
-### `const sortedIterable = iterable.sortBy(comparator)`
-
-Returns a new SortedIterable; SortedIterables are not evaluated until `.result()` or `.sortInPlace()` are evaluated. The sorted iterable wraps the data and contains the rules
-
-The `comparator` is a callback function, identical to one you would provide to the native `Array.sort` method.
-
-### `const sortedIterable = iterable.sortByDescending(comparator)`
-
-Performs the same logic as `.sortBy`, but negates the comparator (turns it from ascending to descending order).
-
-The `comparator` is a callback function, identical to one you would provide to the native `Array.sort` method.
-
-### `const sortedIterable = iterable.sortByField(selector)`
-
-Returns a new SortedIterable. The `selector` is a callback function that selects the field to be selected as the sorting bases in ascending order.
-
-
-### `const sortedIterable = iterable.sortByFieldDescending(selector)`
-
-Performs the same logic as `.sortByField`, but negates the comparator (turns it from ascending to descending order).
-
-The `selector` is a callback function that selects the field to be selected as the sorting bases.
-
-### `const sortedThenBy = iterable.thenBy(comparator)`
-
-Returns a new SortedIterable; in cases where the original `sortBy` comparator returns `0` and all other `thenBy` calls return `0`, this comparator will be run.
-
-### `const sortedThenByDescending = iterable.thenByDescending(comparator)`
-
-Returns a new SortedIterable; in cases where the original `sortBy` comparator returns `0` and all other `thenBy` calls return `0`, this comparator will be run. The comparator will be negated before being run.
-
-### `const sortedThenByField = iterable.thenByField(selector)`
-
-Returns a new SortedIterable. The `selector` is a callback function that selects the field to be selected as the sorting bases in ascending order. In cases where the original `sortBy` comparator returns `0` and all other `thenBy` calls return `0`, this comparator will be run. The comparator will be negated before being run.
-
-### `const sortedThenByFieldDescending = iterable.thenByFieldDescending(comparator)`
-
-Performs the same logic as `.thenByField`, but negates the comparator (turns it from ascending to descending order).
-
-The `selector` is a callback function that selects the field to be selected as the sorting bases.
-
-### `const result = sortedIterable.result()`
-
-Returns a new array in the sorted order, given all sorting rules applied.
-
-### `sortedIterable.sortInPlace()`
-
-Sorts the original array in place and returns the sorted array. **This method is not pure**.
+The API is a mostly pure, fluent API; all methods on Orderables will return new objects (with the exception of `.sortInPlace()`).
 
 ## Example
 
@@ -115,13 +60,222 @@ const testCases = [
     }
   ];
 
-const sortedTests = fluentSort(testCases) // Returns the Iterable
-    .sortByField(x => x.intelligence) // Returns a sorted
-    .thenByFieldDescending(y => y.agility) // Returns the sorted iterable with the new sort applied
-    .result();
+const sortedTests = fluentSort(testCases) // Returns the OrderableInitiator
+    .sortByField(x => x.intelligence) // Returns the Orderable
+    .thenByFieldDescending(y => y.agility) // Returns a new Orderable with both rules applied
+    .result(); // Evaluates and returns the result
 
 console.log(sortedTests);
 ```
+
+
+## Classes
+
+<dl>
+<dt><a href="#Orderable">Orderable</a></dt>
+<dd><p>A wrapper around an array and a set of rules defining how the array is to be ordered</p>
+</dd>
+<dt><a href="#OrderableInitiator">OrderableInitiator</a></dt>
+<dd><p>A wrapper around an array, prepared to be ordered.</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#comparatorCallback">comparatorCallback</a> ⇒ <code>number</code></dt>
+<dd><p>A callback for comparing 2 objects and their associated sort order.</p>
+</dd>
+<dt><a href="#selectorCallback">selectorCallback</a> ⇒ <code>any</code></dt>
+<dd><p>A callback for selecting a field from an object.</p>
+</dd>
+</dl>
+
+<a name="Orderable"></a>
+
+## Orderable
+A wrapper around an array and a set of rules defining how the array is to be ordered
+
+**Kind**: global class
+
+* [Orderable](#Orderable)
+    * [new Orderable(arr, comparators)](#new_Orderable_new)
+    * [.thenBy(comparator)](#Orderable+thenBy) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.thenByDescending(comparator)](#Orderable+thenByDescending) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.thenByField(selector)](#Orderable+thenByField) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.thenByFieldDescending(selector)](#Orderable+thenByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.result()](#Orderable+result) ⇒ <code>array</code>
+    * [.sortInPlace()](#Orderable+sortInPlace) ⇒ <code>array</code>
+
+<a name="new_Orderable_new"></a>
+
+### new Orderable(arr, comparators)
+Create an orderable.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arr | <code>array</code> | The data that will be ordered |
+| comparators | <code>array</code> | An array of callback functions that will compare the data to be sorted |
+
+<a name="Orderable+thenBy"></a>
+
+### orderable.thenBy(comparator) ⇒ [<code>Orderable</code>](#Orderable)
+Generates a new Orderable with the next sorting rule added.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| comparator | [<code>comparatorCallback</code>](#comparatorCallback) | The callback that will be added to the array sorting rule |
+
+<a name="Orderable+thenByDescending"></a>
+
+### orderable.thenByDescending(comparator) ⇒ [<code>Orderable</code>](#Orderable)
+Generates a new Orderable with the next sorting rule added to be sorted in descending order.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| comparator | [<code>comparatorCallback</code>](#comparatorCallback) | The callback that will be added to the array sorting rule |
+
+<a name="Orderable+thenByField"></a>
+
+### orderable.thenByField(selector) ⇒ [<code>Orderable</code>](#Orderable)
+Generates a new Orderable with the next sorting rule added.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | [<code>selectorCallback</code>](#selectorCallback) \| <code>string</code> | A selector to run on the left and right object to select a field to be sorted on, or a string to represent the field name to be sorted on. |
+
+<a name="Orderable+thenByFieldDescending"></a>
+
+### orderable.thenByFieldDescending(selector) ⇒ [<code>Orderable</code>](#Orderable)
+Generates a new Orderable with the next sorting rule added to be sorted in descending order.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | [<code>selectorCallback</code>](#selectorCallback) \| <code>string</code> | A selector to run on the left and right object to select a field to be sorted on, or a string to represent the field name to be sorted on. |
+
+<a name="Orderable+result"></a>
+
+### orderable.result() ⇒ <code>array</code>
+Generates a copy of the array, sorted.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: <code>array</code> - The sorted array
+<a name="Orderable+sortInPlace"></a>
+
+### orderable.sortInPlace() ⇒ <code>array</code>
+Sorts the original array, in place. This method is not pure.
+
+**Kind**: instance method of [<code>Orderable</code>](#Orderable)
+**Returns**: <code>array</code> - The sorted array
+<a name="OrderableInitiator"></a>
+
+## OrderableInitiator
+A wrapper around an array, prepared to be ordered.
+
+**Kind**: global class
+
+* [OrderableInitiator](#OrderableInitiator)
+    * [new OrderableInitiator(arr)](#new_OrderableInitiator_new)
+    * [.sortBy(comparator)](#OrderableInitiator+sortBy) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.sortByDescending(comparator)](#OrderableInitiator+sortByDescending) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.sortByField(selector)](#OrderableInitiator+sortByField) ⇒ [<code>Orderable</code>](#Orderable)
+    * [.sortByFieldDescending(selector)](#OrderableInitiator+sortByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
+
+<a name="new_OrderableInitiator_new"></a>
+
+### new OrderableInitiator(arr)
+Create an orderable initiator.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arr | <code>array</code> | The data that will be ordered |
+
+<a name="OrderableInitiator+sortBy"></a>
+
+### orderableInitiator.sortBy(comparator) ⇒ [<code>Orderable</code>](#Orderable)
+Initiates the orderable with an initial sort order.
+
+**Kind**: instance method of [<code>OrderableInitiator</code>](#OrderableInitiator)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| comparator | [<code>comparatorCallback</code>](#comparatorCallback) | The callback that will be run first to sort the array |
+
+<a name="OrderableInitiator+sortByDescending"></a>
+
+### orderableInitiator.sortByDescending(comparator) ⇒ [<code>Orderable</code>](#Orderable)
+Initiates the orderable with an initial sort order in descending order.
+
+**Kind**: instance method of [<code>OrderableInitiator</code>](#OrderableInitiator)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| comparator | [<code>comparatorCallback</code>](#comparatorCallback) | The callback that will be run first to sort the array |
+
+<a name="OrderableInitiator+sortByField"></a>
+
+### orderableInitiator.sortByField(selector) ⇒ [<code>Orderable</code>](#Orderable)
+Initiates the orderable with a sort on the supplied field.
+
+**Kind**: instance method of [<code>OrderableInitiator</code>](#OrderableInitiator)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | [<code>selectorCallback</code>](#selectorCallback) \| <code>string</code> | A selector to run on the left and right object to select a field to be sorted on, or a string to represent the field name to be sorted on. |
+
+<a name="OrderableInitiator+sortByFieldDescending"></a>
+
+### orderableInitiator.sortByFieldDescending(selector) ⇒ [<code>Orderable</code>](#Orderable)
+Initiates the orderable with a sort on the supplied field in descending order.
+
+**Kind**: instance method of [<code>OrderableInitiator</code>](#OrderableInitiator)
+**Returns**: [<code>Orderable</code>](#Orderable) - The configured orderable structure.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | [<code>selectorCallback</code>](#selectorCallback) \| <code>string</code> | A selector to run on the left and right object to select a field to be sorted on, or a string to represent the field name to be sorted on. |
+
+<a name="comparatorCallback"></a>
+
+## comparatorCallback ⇒ <code>number</code>
+A callback for comparing 2 objects and their associated sort order.
+
+**Kind**: global typedef
+**Returns**: <code>number</code> - 1, 0, or -1 to denote whether left comes before, equal to, or after right
+
+| Param | Type | Description |
+| --- | --- | --- |
+| left | <code>left</code> | the left object |
+| right | <code>right</code> | the right object |
+
+<a name="selectorCallback"></a>
+
+## selectorCallback ⇒ <code>any</code>
+A callback for selecting a field from an object.
+
+**Kind**: global typedef
+**Returns**: <code>any</code> - the field to be sorted on
+
+| Param | Type | Description |
+| --- | --- | --- |
+| obj | <code>obj</code> | object - The object that the field will be selected from |
 
 ## Installation
 

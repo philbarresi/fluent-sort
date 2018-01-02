@@ -336,7 +336,7 @@ describe("error handling", () => {
 });
 
 describe("field tests", () => {
-  test("sortByField places Unimpressive Monster first", () => {
+  test("sortByField with function places Unimpressive Monster first", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
       .sortByField(x => x.intelligence)
@@ -346,10 +346,30 @@ describe("field tests", () => {
     expect(firstResult.name).toBe("Unimpressive Monster");
   });
 
-  test("sortByField places Smart Monster last", () => {
+  test("sortByField with string places Unimpressive Monster first", () => {
+    const tests = getTests();
+    const sortedTests = fluentSort(tests)
+      .sortByField("intelligence")
+      .result();
+    const firstResult = sortedTests[0];
+
+    expect(firstResult.name).toBe("Unimpressive Monster");
+  });
+
+  test("sortByField with function places Smart Monster last", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
       .sortByField(x => x.intelligence)
+      .result();
+    const lastResult = sortedTests.pop();
+
+    expect(lastResult.name).toBe("Smart Monster");
+  });
+
+  test("sortByField with string places Smart Monster last", () => {
+    const tests = getTests();
+    const sortedTests = fluentSort(tests)
+      .sortByField("intelligence")
       .result();
     const lastResult = sortedTests.pop();
 
