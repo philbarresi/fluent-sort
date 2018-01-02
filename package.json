@@ -1,6 +1,6 @@
 {
   "name": "fluent-sort",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A library for fluently sorting JavaScript arrays",
   "main": "src/fluentSort.js",
   "scripts": {

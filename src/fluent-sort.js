@@ -98,8 +98,6 @@ class Orderable {
    * @return {Orderable} The configured orderable structure.
    */
   thenByDescending(comparator) {
-    checkFunction(comparator);
-
     return this.thenBy(negateComparator(comparator));
   }
 
@@ -109,8 +107,6 @@ class Orderable {
    * @return {Orderable} The configured orderable structure.
    */
   thenByField(selector) {
-    checkFunction(selector);
-
     return this.thenBy(selectorToComparator(selector));
   }
 
@@ -120,8 +116,6 @@ class Orderable {
    * @return {Orderable} The configured orderable structure.
    */
   thenByFieldDescending(selector) {
-    checkFunction(selector);
-
     return this.thenByDescending(selectorToComparator(selector));
   }
 
