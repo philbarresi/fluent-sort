@@ -94,17 +94,15 @@ describe("basic tests", () => {
 
   test("sorting by 1 field sets comparator pool to length of 1", () => {
     const tests = getTests();
-    const sortedTests = fluentSort(tests)
-      .sortBy((left, right) => {
-        if (left.id > right.id) return -1;
-        if (left.id < right.id) return 1;
+    const sortedTests = fluentSort(tests).sortBy((left, right) => {
+      if (left.id > right.id) return -1;
+      if (left.id < right.id) return 1;
 
-        return 0;
-      });
+      return 0;
+    });
 
-      expect(sortedTests.sortComparators).toHaveLength(1); 
+    expect(sortedTests.sortComparators).toHaveLength(1);
   });
-
 
   test("sorting by 1 field gives same order as native sort (by monsterdexOrder)", () => {
     const comparator = (left, right) => {
@@ -208,7 +206,6 @@ describe("error handling", () => {
     }).toThrow();
   });
 
-
   test("throws when thenBy not given a comparator", () => {
     const tests = getTests();
 
@@ -233,6 +230,52 @@ describe("error handling", () => {
     }).toThrow();
   });
 
+  test("throws when generating a result when sortComparators is not an array", () => {
+    const tests = getTests();
+    const sortedTests = fluentSort(tests).sortBy((left, right) => {
+      if (left.id > right.id) return -1;
+      if (left.id < right.id) return 1;
+
+      return 0;
+    });
+
+    sortedTests.sortComparators = undefined;
+    expect(() => {
+      const sortedTestsThenBy = sortedTests.thenByField(x => x.agility);
+    }).toThrow();
+  });
+
+  test("throws when generating a result when sortComparators is not an array", () => {
+    const tests = getTests();
+    expect(() => {
+      const sortedTests = fluentSort(tests).sortBy((left, right) => {
+        if (left.id > right.id) return -1;
+        if (left.id < right.id) return 1;
+
+        return 0;
+      });
+
+      sortedTests.sortComparators = undefined;
+
+      sortedTests.result();
+    }).toThrow();
+  });
+
+  test("throws when generating result when sortComparators is empty", () => {
+    const tests = getTests();
+    expect(() => {
+      const sortedTests = fluentSort(tests).sortBy((left, right) => {
+        if (left.id > right.id) return -1;
+        if (left.id < right.id) return 1;
+
+        return 0;
+      });
+
+      sortedTests.sortComparators = [];
+
+      sortedTests.result();
+    }).toThrow();
+  });
 });
 
 describe("field tests", () => {

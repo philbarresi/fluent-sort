@@ -49,7 +49,7 @@ function selectorToComparator(fieldSelector) {
 class SortedIterable {
   thenBy(comparator) {
     checkFunction(comparator);
-    
+
     this.sortComparators.push(comparator);
 
     return this;
@@ -57,7 +57,7 @@ class SortedIterable {
 
   result() {
     const resultArr = this.data.slice(0);
-
+    
     resultArr.sort(composeSort(this.sortComparators));
 
     return resultArr;
@@ -70,9 +70,7 @@ class SortedIterable {
   }
 
   thenByField(selector) {
-    this.sortComparators.push(selectorToComparator(selector));
-
-    return this;
+    return this.thenBy(selectorToComparator(selector));
   }
 
   descending() {
@@ -102,8 +100,7 @@ class Iterable {
 
   sortByField(selector) {
     const comparator = selectorToComparator(selector);
-
-    return new SortedIterable(this.data, comparator);
+    return this.sortBy(comparator);
   }
 
   constructor(arr) {
