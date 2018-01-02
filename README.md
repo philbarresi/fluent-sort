@@ -139,7 +139,7 @@ const fluentSort = require("fluent-sort");
 
 ### In your browser
 
-Add a script reference to the file `/dist/fluentSort.min.js` to your page, and use it as above:
+Add a script reference to the file `/dist/fluent-sort.min.js` to your page, and use it as above:
 
 ```
 var sortedTests = fluentSort(testCases)

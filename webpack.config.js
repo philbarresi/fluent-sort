@@ -2,10 +2,10 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/fluentSort.js",
+  entry: "./src/fluent-sort.js",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "fluentSort.min.js",
+    filename: "fluent-sort.min.js",
     libraryTarget: "umd",
     library: "fluentSort"
   },
