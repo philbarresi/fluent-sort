@@ -8,7 +8,7 @@
 
 The API is a mostly pure, fluent API; all methods on Sorted Iterables will return new sorted iterables (with the exception of `.sortInPlace()`).
 
-### `const iteratble = fluentSort(arr);`
+### `const iterable = fluentSort(arr);`
 
 Returns a new Iterable, which is an unsorted wrapper around the array provided.
 
@@ -134,7 +134,7 @@ npm install fluent-sort
 And in your file:
 
 ```
-const fluentSort = require("./fluentSort");
+const fluentSort = require("fluent-sort");
 ```
 
 ### In your browser
