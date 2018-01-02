@@ -168,10 +168,8 @@ describe("thenBy tests", () => {
   test("sorting by intelligence descending then by agility descending results a the correct order", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
-      .sortByField(x => x.intelligence)
-      .descending()
-      .thenByField(y => y.agility)
-      .descending()
+      .sortByFieldDescending(x => x.intelligence)
+      .thenByFieldDescending(y => y.agility)
       .result();
 
     expect(sortedTests[0].name).toBe("Smart Monster");
@@ -181,9 +179,29 @@ describe("thenBy tests", () => {
     expect(sortedTests[4].name).toBe("Fast Monster");
     expect(sortedTests[5].name).toBe("Unimpressive Monster");
   });
-});
 
-describe("chain tests", () => {});
+  test("sorting by intelligence ascending then by agility descending results a the correct order", () => {
+    const tests = getTests();
+    const comparator = (left, right) => {
+      if (left.agility > right.agility) return -1;
+      if (left.agility < right.agility) return 1;
+
+      return 0;
+    };
+
+    const sortedTests = fluentSort(tests)
+      .sortByField(x => x.intelligence)
+      .thenByDescending(comparator)
+      .result();
+
+    expect(sortedTests[0].name).toBe("Unimpressive Monster");
+    expect(sortedTests[1].name).toBe("Fast Monster");
+    expect(sortedTests[2].name).toBe("Slow Monster");
+    expect(sortedTests[3].name).toBe("Strong Monster");
+    expect(sortedTests[4].name).toBe("Mediocre Monster");
+    expect(sortedTests[5].name).toBe("Smart Monster");
+  });
+});
 
 describe("error handling", () => {
   test("throws when fluentSort not given array", () => {
@@ -206,24 +224,62 @@ describe("error handling", () => {
     }).toThrow();
   });
 
+  test("throws when sortByFieldDescending not given a comparator", () => {
+    const tests = getTests();
+    expect(() => {
+      const sortedTests = fluentSort(tests).sortByFieldDescending();
+    }).toThrow();
+  });
+
+  test("throws when sortByDescending not given a comparator", () => {
+    const tests = getTests();
+    expect(() => {
+      const sortedTests = fluentSort(tests).sortByDescending();
+    }).toThrow();
+  });
+
   test("throws when thenBy not given a comparator", () => {
     const tests = getTests();
 
-    const sortedTests = fluentSort(tests)
-      .sortByField(x => x.intelligence)
-      .descending();
+    const sortedTests = fluentSort(tests).sortByFieldDescending(
+      x => x.intelligence
+    );
 
     expect(() => {
       const thenBy = sortedTests.thenBy(false);
     }).toThrow();
   });
 
+  test("throws when thenByDescending not given a comparator", () => {
+    const tests = getTests();
+
+    const sortedTests = fluentSort(tests).sortByFieldDescending(
+      x => x.intelligence
+    );
+
+    expect(() => {
+      const thenBy = sortedTests.thenByDescending();
+    }).toThrow();
+  });
+
+  test("throws when thenByFieldDescending not given a comparator", () => {
+    const tests = getTests();
+
+    const sortedTests = fluentSort(tests).sortByFieldDescending(
+      x => x.intelligence
+    );
+
+    expect(() => {
+      const thenBy = sortedTests.thenByFieldDescending();
+    }).toThrow();
+  });
+
   test("throws when thenByField not given a comparator", () => {
     const tests = getTests();
 
-    const sortedTests = fluentSort(tests)
-      .sortByField(x => x.intelligence)
-      .descending();
+    const sortedTests = fluentSort(tests).sortByFieldDescending(
+      x => x.intelligence
+    );
 
     expect(() => {
       const thenBy = sortedTests.thenByField();
@@ -303,8 +359,7 @@ describe("field tests", () => {
   test("sortByField descending places Smart Monster first", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
-      .sortByField(x => x.intelligence)
-      .descending()
+      .sortByFieldDescending(x => x.intelligence)
       .result();
     const firstResult = sortedTests[0];
 
@@ -314,8 +369,7 @@ describe("field tests", () => {
   test("sortByField descending places Unimpressive Monster last", () => {
     const tests = getTests();
     const sortedTests = fluentSort(tests)
-      .sortByField(x => x.intelligence)
-      .descending()
+      .sortByFieldDescending(x => x.intelligence)
       .result();
     const lastResult = sortedTests.pop();
 

@@ -50,9 +50,25 @@ class SortedIterable {
   thenBy(comparator) {
     checkFunction(comparator);
 
-    this.sortComparators.push(comparator);
+    return new SortedIterable(this.data, [...this.sortComparators, comparator]);
+  }
 
-    return this;
+  thenByDescending(comparator) {
+    checkFunction(comparator);
+
+    return this.thenBy(negateComparator(comparator));
+  }
+
+  thenByField(selector) {
+    checkFunction(selector);
+
+    return this.thenBy(selectorToComparator(selector));
+  }
+
+  thenByFieldDescending(selector) {
+    checkFunction(selector);
+
+    return this.thenByDescending(selectorToComparator(selector));
   }
 
   result() {
@@ -69,24 +85,12 @@ class SortedIterable {
     return this.data;
   }
 
-  thenByField(selector) {
-    return this.thenBy(selectorToComparator(selector));
-  }
-
-  descending() {
-    const currentLastComparator = this.sortComparators.pop();
-    const newComparator = negateComparator(currentLastComparator);
-
-    this.sortComparators.push(newComparator);
-
-    return this;
-  }
-
-  constructor(arr, comparator) {
+  constructor(arr, comparators) {
     checkArray(arr);
-    checkFunction(comparator);
+    checkArray(comparators);
+    comparators.forEach(checkFunction);
 
-    this.sortComparators = [comparator];
+    this.sortComparators = comparators;
     this.data = arr;
 
     return this;
@@ -95,12 +99,19 @@ class SortedIterable {
 
 class Iterable {
   sortBy(comparator) {
-    return new SortedIterable(this.data, comparator);
+    return new SortedIterable(this.data, [comparator]);
+  }
+
+  sortByDescending(comparator) {
+    return this.sortBy(negateComparator(comparator));
   }
 
   sortByField(selector) {
-    const comparator = selectorToComparator(selector);
-    return this.sortBy(comparator);
+    return this.sortBy(selectorToComparator(selector));
+  }
+
+  sortByFieldDescending(selector) {
+    return this.sortByDescending(selectorToComparator(selector));
   }
 
   constructor(arr) {
