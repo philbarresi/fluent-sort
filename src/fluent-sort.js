@@ -9,52 +9,55 @@
 /**
  * A callback for selecting a field from an object.
  * @callback selectorCallback
- * @param {obj} obj - object - The object that the field will be selected from 
+ * @param {obj} obj - object - The object that the field will be selected from
  * @returns {any} the field to be sorted on
  */
 
-function checkArray(arr) {
+const checkArray = function checkArray(arr) {
   if (!Array.isArray(arr)) {
     throw new Error("Argument is not an array");
   }
-}
+};
 
-function checkFunction(fn) {
+const checkFunction = function checkFunction(fn) {
   if (typeof fn !== "function") {
     throw new Error("Argument is not a function");
   }
-}
+};
 
-function checkString(str) {
+const checkString = function checkString(str) {
   if (typeof str !== "string") {
     throw new Error("Argument is not a string");
   }
-}
+};
 
-function composeSort(comparators) {
+const composeSort = function composeSort(comparators) {
   checkArray(comparators);
 
   if (comparators.length === 0)
     throw new Error("Must provide at least one comparator");
 
   return function(left, right) {
-    return comparators.reduce((currentResult, currentComparator) => {
-      if (currentResult !== 0) return currentResult;
-      return currentComparator(left, right);
-    }, 0);
-  };
-}
+    for (let i = 0; i < comparators.length; i++) {
+      const currentComparator = comparators[i];
+      const currentRound = currentComparator(left, right);
+      if (currentRound !== 0) return currentRound;
+    }
 
-function negateComparator(comparator) {
+    return 0;
+  };
+};
+
+const negateComparator = function negateComparator(comparator) {
   checkFunction(comparator);
 
   return function(left, right) {
     return -1 * comparator(left, right);
   };
-}
+};
 
-function selectorToComparator(fieldSelector) {
-  var selector = fieldSelector;
+const selectorToComparator = function selectorToComparator(fieldSelector) {
+  let selector = fieldSelector;
 
   try {
     checkString(selector);
@@ -74,7 +77,7 @@ function selectorToComparator(fieldSelector) {
 
     return 0;
   };
-}
+};
 
 /**
  * A wrapper around an array and a set of rules defining how the array is to be ordered
