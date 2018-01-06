@@ -101,7 +101,7 @@ describe("basic tests", () => {
       return 0;
     });
 
-    expect(sortedTests.sortComparators).toHaveLength(1);
+    expect(sortedTests._sortComparators).toHaveLength(1);
   });
 
   test("sorting by 1 field gives same order as native sort (by monsterdexOrder)", () => {
@@ -310,7 +310,7 @@ describe("error handling", () => {
       return 0;
     });
 
-    sortedTests.sortComparators = undefined;
+    sortedTests._sortComparators = undefined;
 
     expect(() => {
       const sortedTestsThenBy = sortedTests.thenByField(x => x.agility);
@@ -326,7 +326,7 @@ describe("error handling", () => {
       return 0;
     });
 
-    sortedTests.sortComparators = undefined;
+    sortedTests._sortComparators = undefined;
 
     expect(() => {
       sortedTests.result();
@@ -343,7 +343,7 @@ describe("error handling", () => {
         return 0;
       });
 
-      sortedTests.sortComparators = [];
+      sortedTests._sortComparators = [];
 
       sortedTests.result();
     }).toThrow();

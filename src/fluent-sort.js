@@ -85,6 +85,22 @@ const selectorToComparator = function selectorToComparator(fieldSelector) {
  */
 class Orderable {
   /**
+   * Create an orderable.
+   * @param {array} arr - The data that will be ordered
+   * @param {array} comparators - An array of callback functions that will compare the data to be sorted
+   */
+  constructor(arr, comparators) {
+    checkArray(arr);
+    checkArray(comparators);
+    comparators.forEach(checkFunction);
+
+    this._sortComparators = comparators;
+    this.data = arr;
+
+    return this;
+  }
+
+  /**
    * Generates a new Orderable with the next sorting rule added.
    * @param {comparatorCallback} comparator - The callback that will be added to the array sorting rule
    * @return {Orderable} The configured orderable structure.
@@ -92,7 +108,7 @@ class Orderable {
   thenBy(comparator) {
     checkFunction(comparator);
 
-    return new Orderable(this.data, [...this.sortComparators, comparator]);
+    return new Orderable(this.data, [...this._sortComparators, comparator]);
   }
 
   /**
@@ -129,7 +145,7 @@ class Orderable {
   result() {
     const resultArr = this.data.slice(0);
 
-    resultArr.sort(composeSort(this.sortComparators));
+    resultArr.sort(composeSort(this._sortComparators));
 
     return resultArr;
   }
@@ -139,25 +155,9 @@ class Orderable {
    * @return {array} The sorted array
    */
   sortInPlace() {
-    this.data.sort(composeSort(this.sortComparators));
+    this.data.sort(composeSort(this._sortComparators));
 
     return this.data;
-  }
-
-  /**
-   * Create an orderable.
-   * @param {array} arr - The data that will be ordered
-   * @param {array} comparators - An array of callback functions that will compare the data to be sorted
-   */
-  constructor(arr, comparators) {
-    checkArray(arr);
-    checkArray(comparators);
-    comparators.forEach(checkFunction);
-
-    this.sortComparators = comparators;
-    this.data = arr;
-
-    return this;
   }
 }
 
@@ -166,6 +166,18 @@ class Orderable {
  * @class
  */
 class OrderableInitiator {
+  /**
+   * Create an orderable initiator.
+   * @param {array} arr - The data that will be ordered
+   */
+  constructor(arr) {
+    checkArray(arr);
+
+    this.data = arr;
+
+    return this;
+  }
+
   /**
    * Initiates the orderable with an initial sort order.
    * @param {comparatorCallback} comparator - The callback that will be run first to sort the array
@@ -200,18 +212,6 @@ class OrderableInitiator {
    */
   sortByFieldDescending(selector) {
     return this.sortByDescending(selectorToComparator(selector));
-  }
-
-  /**
-   * Create an orderable initiator.
-   * @param {array} arr - The data that will be ordered
-   */
-  constructor(arr) {
-    checkArray(arr);
-
-    this.data = arr;
-
-    return this;
   }
 }
 
