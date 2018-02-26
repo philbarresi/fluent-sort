@@ -1,6 +1,6 @@
 {
   "name": "fluent-sort",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A library for fluently sorting JavaScript arrays",
   "main": "src/fluentSort.js",
   "scripts": {
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Troy-Web-Consulting/fluent-sort.git"
+    "url": "git+https://github.com/philbarresi/fluent-sort.git"
   },
   "keywords": ["sorting", "fluent"],
   "author": "Phil Barresi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Troy-Web-Consulting/fluent-sort/issues"
+    "url": "https://github.com/philbarresi/fluent-sort/issues"
   },
-  "homepage": "https://github.com/Troy-Web-Consulting/fluent-sort#readme",
+  "homepage": "https://github.com/philbarresi/fluent-sort#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
