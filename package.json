@@ -1,8 +1,8 @@
 {
   "name": "fluent-sort",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A library for fluently sorting JavaScript arrays",
-  "main": "src/fluentSort.js",
+  "main": "src/fluent-sort.js",
   "scripts": {
     "test": "jest",
     "test-coverage": "jest --coverage",
