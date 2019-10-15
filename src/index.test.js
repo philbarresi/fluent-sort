@@ -1,4 +1,4 @@
-const fluentSort = require("./fluent-sort");
+const fluentSort = require("./index");
 
 function getTests() {
   return [
