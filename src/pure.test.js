@@ -1,4 +1,4 @@
-import FluentSortArray from "./index";
+import PureFluentSortArray from "./pure";
 
 function getTests() {
   return [
@@ -61,7 +61,7 @@ beforeEach(() => {
 
 describe("basic tests", () => {
   test("sorting by id results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.id)
       .sortedResult();
 
@@ -74,7 +74,7 @@ describe("basic tests", () => {
   });
 
   test("sorting by id manually by descending results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortComparing((left, right) => {
         if (left.id > right.id) return -1;
         if (left.id < right.id) return 1;
@@ -92,7 +92,7 @@ describe("basic tests", () => {
   });
 
   test("sortByAscending results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.id)
       .sortedResult();
 
@@ -105,7 +105,7 @@ describe("basic tests", () => {
   });
 
   test("sorting by 1 field sets comparator pool to length of 1", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases).sortBy(
+    const sortedTests = new PureFluentSortArray(...fluentTestCases).sortBy(
       (left, right) => {
         if (left.id > right.id) return -1;
         if (left.id < right.id) return 1;
@@ -127,7 +127,7 @@ describe("basic tests", () => {
 
     const nativeTestCases = getTests();
 
-    const fluentResults = new FluentSortArray(...fluentTestCases)
+    const fluentResults = new PureFluentSortArray(...fluentTestCases)
       .sortComparing(comparator)
       .sortedResult();
 
@@ -141,7 +141,7 @@ describe("basic tests", () => {
 
 describe("thenBy tests", () => {
   test("sorting by intelligence ascending (by string) then by agility ascending (by string) results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
       .thenBy("agility")
       .sortedResult();
@@ -162,7 +162,7 @@ describe("thenBy tests", () => {
       return 0;
     };
 
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenComparing(comparator)
       .sortedResult();
@@ -176,7 +176,7 @@ describe("thenBy tests", () => {
   });
 
   test("sorting by intelligence ascending then by agility ascending results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.intelligence)
       .thenByAscending(y => y.agility)
       .sortedResult();
@@ -190,7 +190,7 @@ describe("thenBy tests", () => {
   });
 
   test("sorting by intelligence ascending then by agility ascending results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenBy(y => y.agility)
       .sortedResult();
@@ -204,7 +204,7 @@ describe("thenBy tests", () => {
   });
 
   test("sorting by intelligence descending then by agility descending results in the correct order", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
       .thenByDescending(y => y.agility)
       .sortedResult();
@@ -225,7 +225,7 @@ describe("thenBy tests", () => {
       return 0;
     };
 
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenComparing(comparator)
       .sortedResult();
@@ -242,15 +242,15 @@ describe("thenBy tests", () => {
 describe("error handling", () => {
   test("throws when sortComparing not given a function", () => {
     expect(() => {
-      const sortedTests = new FluentSortArray(...fluentTestCases).sortComparing(
-        true
-      );
+      const sortedTests = new PureFluentSortArray(
+        ...fluentTestCases
+      ).sortComparing(true);
     }).toThrow();
   });
 
   test("throws when sortComparing not given an argument", () => {
     expect(() => {
-      const sortedTests = new FluentSortArray(
+      const sortedTests = new PureFluentSortArray(
         ...fluentTestCases
       ).sortComparing();
     }).toThrow();
@@ -258,7 +258,7 @@ describe("error handling", () => {
 
   test("throws when sortByDescending not given a comparator", () => {
     expect(() => {
-      const sortedTests = new FluentSortArray(
+      const sortedTests = new PureFluentSortArray(
         ...fluentTestCases
       ).sortByDescending();
     }).toThrow();
@@ -266,14 +266,14 @@ describe("error handling", () => {
 
   test("throws when sortByDescending not given a comparator", () => {
     expect(() => {
-      const sortedTests = new FluentSortArray(
+      const sortedTests = new PureFluentSortArray(
         ...fluentTestCases
       ).sortByDescending();
     }).toThrow();
   });
 
   test("throws when thenBy not given a comparator", () => {
-    const sortedTests = new FluentSortArray(
+    const sortedTests = new PureFluentSortArray(
       ...fluentTestCases
     ).sortByDescending(x => x.intelligence);
 
@@ -283,7 +283,7 @@ describe("error handling", () => {
   });
 
   test("throws when thenByDescending not given a comparator", () => {
-    const sortedTests = new FluentSortArray(
+    const sortedTests = new PureFluentSortArray(
       ...fluentTestCases
     ).sortByDescending(x => x.intelligence);
 
@@ -293,7 +293,7 @@ describe("error handling", () => {
   });
 
   test("throws when thenByDescending not given a comparator", () => {
-    const sortedTests = new FluentSortArray(
+    const sortedTests = new PureFluentSortArray(
       ...fluentTestCases
     ).sortByDescending(x => x.intelligence);
 
@@ -303,7 +303,7 @@ describe("error handling", () => {
   });
 
   test("throws when thenBy not given a comparator", () => {
-    const sortedTests = new FluentSortArray(
+    const sortedTests = new PureFluentSortArray(
       ...fluentTestCases
     ).sortByDescending(x => x.intelligence);
 
@@ -313,7 +313,7 @@ describe("error handling", () => {
   });
 
   test("throws when adding a thenBy when sortComparators is not an array", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases).sortBy(
+    const sortedTests = new PureFluentSortArray(...fluentTestCases).sortBy(
       (left, right) => {
         if (left.id > right.id) return -1;
         if (left.id < right.id) return 1;
@@ -330,7 +330,7 @@ describe("error handling", () => {
   });
 
   test("throws when generating a result when sortComparators is not an array", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases).sortBy(
+    const sortedTests = new PureFluentSortArray(...fluentTestCases).sortBy(
       (left, right) => {
         if (left.id > right.id) return -1;
         if (left.id < right.id) return 1;
@@ -348,7 +348,7 @@ describe("error handling", () => {
 
   test("throws when generating result when sortComparators is empty", () => {
     expect(() => {
-      const sortedTests = new FluentSortArray(...fluentTestCases).sortBy(
+      const sortedTests = new PureFluentSortArray(...fluentTestCases).sortBy(
         (left, right) => {
           if (left.id > right.id) return -1;
           if (left.id < right.id) return 1;
@@ -366,7 +366,7 @@ describe("error handling", () => {
 
 describe("field tests", () => {
   test("sortBy with function places Unimpressive Monster first", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .sortedResult();
     const firstResult = sortedTests[0];
@@ -375,7 +375,7 @@ describe("field tests", () => {
   });
 
   test("sortBy with string places Unimpressive Monster first", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
       .sortedResult();
     const firstResult = sortedTests[0];
@@ -384,7 +384,7 @@ describe("field tests", () => {
   });
 
   test("sortBy with function places Smart Monster last", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .sortedResult();
     const lastResult = sortedTests.pop();
@@ -393,7 +393,7 @@ describe("field tests", () => {
   });
 
   test("sortBy with string places Smart Monster last", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
       .sortedResult();
     const lastResult = sortedTests.pop();
@@ -402,7 +402,7 @@ describe("field tests", () => {
   });
 
   test("sortBy descending places Smart Monster first", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
       .sortedResult();
     const firstResult = sortedTests[0];
@@ -411,7 +411,7 @@ describe("field tests", () => {
   });
 
   test("sortByDescending places Unimpressive Monster last", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
       .sortedResult();
     const lastResult = sortedTests.pop();
@@ -420,7 +420,7 @@ describe("field tests", () => {
   });
 
   test("sortByAscending places Unimpressive Monster last", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.intelligence)
       .sortedResult();
     const firstResult = sortedTests.shift();
@@ -429,7 +429,7 @@ describe("field tests", () => {
   });
 
   test("sortByAscending with string places Unimpressive Monster last", () => {
-    const sortedTests = new FluentSortArray(...fluentTestCases)
+    const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending("intelligence")
       .sortedResult();
     const firstResult = sortedTests.shift();

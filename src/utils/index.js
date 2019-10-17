@@ -1,3 +1,5 @@
+const TOKENIZER_REGEX = /\w+/g;
+
 /**
  * A callback for comparing 2 objects and their associated sort order.
  * @callback comparatorCallback
@@ -13,19 +15,19 @@
  * @returns {any} the field to be sorted on
  */
 
-const checkArray = function checkArray(arr) {
+export const checkArray = function checkArray(arr) {
   if (!Array.isArray(arr)) {
     throw new Error("Argument is not an array");
   }
 };
 
-const checkFunction = function checkFunction(fn) {
+export const checkFunction = function checkFunction(fn) {
   if (typeof fn !== "function") {
     throw new Error("Argument is not a function");
   }
 };
 
-const composeSort = function composeSort(comparators) {
+export const composeSort = function composeSort(comparators) {
   checkArray(comparators);
 
   if (comparators.length === 0)
@@ -42,7 +44,7 @@ const composeSort = function composeSort(comparators) {
   };
 };
 
-const negateComparator = function negateComparator(comparator) {
+export const negateComparator = function negateComparator(comparator) {
   checkFunction(comparator);
 
   return function(left, right) {
@@ -50,14 +52,26 @@ const negateComparator = function negateComparator(comparator) {
   };
 };
 
-const selectorToComparator = function selectorToComparator(fieldSelector) {
+export const stringToSelector = function stringToSelector(selectorString) {
+  const tokens = selectorString.match(TOKENIZER_REGEX);
+
+  return obj => {
+    return tokens.reduce((currentObj, currentToken) => {
+      return currentObj[currentToken];
+    }, obj);
+  };
+};
+
+export const selectorToComparator = function selectorToComparator(
+  fieldSelector
+) {
   if (typeof fieldSelector !== "string" && typeof fieldSelector !== "function")
     throw new Error("Selectors must be a string or a function");
 
   const selector =
-    typeof fieldSelector === "string" ? x => x[fieldSelector] : fieldSelector;
-
-  checkFunction(selector);
+    typeof fieldSelector === "string"
+      ? stringToSelector(fieldSelector)
+      : fieldSelector;
 
   return function(left, right) {
     const leftFieldValue = selector(left);
@@ -68,12 +82,4 @@ const selectorToComparator = function selectorToComparator(fieldSelector) {
 
     return 0;
   };
-};
-
-module.exports = {
-  checkArray,
-  checkFunction,
-  composeSort,
-  negateComparator,
-  selectorToComparator
 };
