@@ -63,7 +63,7 @@ describe("basic tests", () => {
   test("sorting by id results in the correct order", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.id)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Strong Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -81,7 +81,7 @@ describe("basic tests", () => {
 
         return 0;
       })
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[5].name).toBe("Strong Monster");
     expect(sortedTests[4].name).toBe("Fast Monster");
@@ -94,7 +94,7 @@ describe("basic tests", () => {
   test("sortByAscending results in the correct order", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.id)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Strong Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -129,7 +129,7 @@ describe("basic tests", () => {
 
     const fluentResults = new PureFluentSortArray(...fluentTestCases)
       .sortComparing(comparator)
-      .sortedResult();
+      .executeCompositeSort();
 
     nativeTestCases.sort(comparator);
 
@@ -144,7 +144,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
       .thenBy("agility")
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Unimpressive Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -165,7 +165,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenComparing(comparator)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Unimpressive Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -179,7 +179,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.intelligence)
       .thenByAscending(y => y.agility)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Unimpressive Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -193,7 +193,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenBy(y => y.agility)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Unimpressive Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -207,7 +207,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
       .thenByDescending(y => y.agility)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Smart Monster");
     expect(sortedTests[1].name).toBe("Mediocre Monster");
@@ -228,7 +228,7 @@ describe("thenBy tests", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
       .thenComparing(comparator)
-      .sortedResult();
+      .executeCompositeSort();
 
     expect(sortedTests[0].name).toBe("Unimpressive Monster");
     expect(sortedTests[1].name).toBe("Fast Monster");
@@ -342,7 +342,7 @@ describe("error handling", () => {
     sortedTests.__comparators = undefined;
 
     expect(() => {
-      sortedTests.sortedResult();
+      sortedTests.executeCompositeSort();
     }).toThrow();
   });
 
@@ -359,7 +359,7 @@ describe("error handling", () => {
 
       sortedTests.__comparators = [];
 
-      sortedTests.sortedResult();
+      sortedTests.executeCompositeSort();
     }).toThrow();
   });
 });
@@ -368,7 +368,7 @@ describe("field tests", () => {
   test("sortBy with function places Unimpressive Monster first", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
-      .sortedResult();
+      .executeCompositeSort();
     const firstResult = sortedTests[0];
 
     expect(firstResult.name).toBe("Unimpressive Monster");
@@ -377,7 +377,7 @@ describe("field tests", () => {
   test("sortBy with string places Unimpressive Monster first", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
-      .sortedResult();
+      .executeCompositeSort();
     const firstResult = sortedTests[0];
 
     expect(firstResult.name).toBe("Unimpressive Monster");
@@ -386,7 +386,7 @@ describe("field tests", () => {
   test("sortBy with function places Smart Monster last", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy(x => x.intelligence)
-      .sortedResult();
+      .executeCompositeSort();
     const lastResult = sortedTests.pop();
 
     expect(lastResult.name).toBe("Smart Monster");
@@ -395,7 +395,7 @@ describe("field tests", () => {
   test("sortBy with string places Smart Monster last", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortBy("intelligence")
-      .sortedResult();
+      .executeCompositeSort();
     const lastResult = sortedTests.pop();
 
     expect(lastResult.name).toBe("Smart Monster");
@@ -404,7 +404,7 @@ describe("field tests", () => {
   test("sortBy descending places Smart Monster first", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
-      .sortedResult();
+      .executeCompositeSort();
     const firstResult = sortedTests[0];
 
     expect(firstResult.name).toBe("Smart Monster");
@@ -413,7 +413,7 @@ describe("field tests", () => {
   test("sortByDescending places Unimpressive Monster last", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByDescending(x => x.intelligence)
-      .sortedResult();
+      .executeCompositeSort();
     const lastResult = sortedTests.pop();
 
     expect(lastResult.name).toBe("Unimpressive Monster");
@@ -422,7 +422,7 @@ describe("field tests", () => {
   test("sortByAscending places Unimpressive Monster last", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending(x => x.intelligence)
-      .sortedResult();
+      .executeCompositeSort();
     const firstResult = sortedTests.shift();
 
     expect(firstResult.name).toBe("Unimpressive Monster");
@@ -431,7 +431,7 @@ describe("field tests", () => {
   test("sortByAscending with string places Unimpressive Monster last", () => {
     const sortedTests = new PureFluentSortArray(...fluentTestCases)
       .sortByAscending("intelligence")
-      .sortedResult();
+      .executeCompositeSort();
     const firstResult = sortedTests.shift();
 
     expect(firstResult.name).toBe("Unimpressive Monster");

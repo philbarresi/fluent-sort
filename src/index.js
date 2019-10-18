@@ -98,7 +98,7 @@ export class FluentSortArray extends Array {
    * Returns the sorted array
    * @return {array} The sorted array
    */
-  sortedResult() {
+  executeCompositeSort() {
     return this.sort(composeSort(this.__comparators));
   }
 }
