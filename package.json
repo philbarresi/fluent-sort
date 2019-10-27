@@ -1,13 +1,16 @@
 {
   "name": "fluent-sort",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "description": "A library for fluently sorting JavaScript arrays",
-  "main": "src/fluent-sort.js",
   "scripts": {
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test-watch": "jest --coverage --watch",
-    "build": "webpack"
+    "clean": "rm -rf lib && mkdir lib",
+    "docs": "cp readme.md package.json package-lock.json ./build",
+    "build": "webpack && babel src --out-dir build/es5 --source-maps",
+    "bundle": "npm run clean && npm run build && npm run docs",
+    "deploy": "npm run bundle && npm publish ./lib"
   },
   "repository": {
     "type": "git",
@@ -24,9 +27,13 @@
   },
   "homepage": "https://github.com/philbarresi/fluent-sort#readme",
   "devDependencies": {
+    "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "babel-jest": "^24.9.0",
-    "jest": "^24.9.0"
+    "babel-loader": "^8.0.6",
+    "jest": "^24.9.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
   }
 }

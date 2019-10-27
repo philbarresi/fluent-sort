@@ -7,7 +7,7 @@ import {
 import FluentSortArray from "./index";
 
 /**
- * A wrapper around an array and a set of rules defining how the array is to be ordered
+ * An array extension with additional features to help sort an array
  * @class
  */
 export class PureFluentSortArray extends FluentSortArray {
@@ -29,11 +29,6 @@ export class PureFluentSortArray extends FluentSortArray {
     return newSortable;
   }
 
-  /**
-   * Initiates a new sorting order
-   * @param {callback} selector - The selector that will be run on each element to determine what field to sort the array on
-   * @return {PureFluentSortArray} The extended array
-   */
   sortBy(selector) {
     const newSortable = new PureFluentSortArray(...this);
     newSortable.__comparators = [selectorToComparator(selector)];
@@ -41,11 +36,6 @@ export class PureFluentSortArray extends FluentSortArray {
     return newSortable;
   }
 
-  /**
-   * Initiates the orderable with an initial sort order in descending order.
-   * @param {callback} selector - The selector that will be run on each element to determine what field to sort the array on
-   * @return {PureFluentSortArray} The extended array
-   */
   sortByDescending(selector) {
     const newSortable = new PureFluentSortArray(...this);
     newSortable.__comparators = [
@@ -55,11 +45,6 @@ export class PureFluentSortArray extends FluentSortArray {
     return newSortable;
   }
 
-  /**
-   * Generates a new Orderable with the next sorting rule added.
-   * @param {callback} selector - The selector that will be run on each element to determine what field to sort the array on
-   * @return {PureFluentSortArray} The extended array
-   */
   thenBy(selector) {
     const newSortable = new PureFluentSortArray(...this);
     newSortable.__comparators = [
@@ -70,11 +55,6 @@ export class PureFluentSortArray extends FluentSortArray {
     return newSortable;
   }
 
-  /**
-   * Generates a new Orderable with the next sorting rule added to be sorted in descending order.
-   * @param {callback} selector - The selector that will be run on each element to determine what field to sort the array on
-   * @return {PureFluentSortArray} The extended array
-   */
   thenByDescending(selector) {
     const newSortable = new PureFluentSortArray(...this);
     newSortable.__comparators = [
@@ -85,10 +65,6 @@ export class PureFluentSortArray extends FluentSortArray {
     return newSortable;
   }
 
-  /**
-   * Returns the sorted array
-   * @return {array} The sorted array
-   */
   executeCompositeSort() {
     return [...this].sort(composeSort(this.__comparators));
   }

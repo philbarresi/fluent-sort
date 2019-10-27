@@ -1,20 +1,5 @@
 const TOKENIZER_REGEX = /\w+/g;
 
-/**
- * A callback for comparing 2 objects and their associated sort order.
- * @callback comparatorCallback
- * @param {left} left - the left object
- * @param {right} right - the right object
- * @returns {number} 1, 0, or -1 to denote whether left comes before, equal to, or after right
- */
-
-/**
- * A callback for selecting a field from an object.
- * @callback selectorCallback
- * @param {obj} obj - object - The object that the field will be selected from
- * @returns {any} the field to be sorted on
- */
-
 export const checkArray = function checkArray(arr) {
   if (!Array.isArray(arr)) {
     throw new Error("Argument is not an array");
