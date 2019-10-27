@@ -8,10 +8,10 @@
     "test-coverage": "jest --coverage",
     "test-watch": "jest --coverage --watch",
     "clean": "rm -rf lib && mkdir lib",
-    "docs": "cp readme.md package.json package-lock.json ./build",
+    "copy": "cp readme.md package.json package-lock.json ./build",
     "build": "webpack && babel src --out-dir build/es5 --source-maps",
-    "bundle": "npm run clean && npm run build && npm run docs",
-    "deploy": "npm run bundle && npm publish ./lib"
+    "bundle": "npm run clean && npm run build && npm run copy",
+    "deploy": "npm run bundle && npm publish ./build"
   },
   "repository": {
     "type": "git",
