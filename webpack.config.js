@@ -1,13 +1,15 @@
 const path = require("path");
-const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/fluent-sort.js",
+  optimization: {
+    minimize: true
+  },
+  mode: "production",
+  entry: { fluentSort: "./src/index.js", pureSort: "./src/pure.js" },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "fluent-sort.min.js",
-    libraryTarget: "umd",
-    library: "fluentSort"
+    path: path.resolve(__dirname, "build", "dist"),
+    filename: "[name].min.js",
+    libraryTarget: "umd"
   },
   module: {
     rules: [
@@ -16,6 +18,5 @@ module.exports = {
         use: "babel-loader"
       }
     ]
-  },
-  plugins: [new webpack.optimize.UglifyJsPlugin()]
+  }
 };

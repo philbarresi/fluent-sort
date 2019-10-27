@@ -2,70 +2,87 @@
 
 ## A fluent sorting library for JavaScript
 
-`fluent-sort` is a compact, dependency-free library (less than 1kb) that provides a fluent, pure API for sorting JavaScript arrays.
-
-The API is a mostly pure, fluent API; all methods on Orderables will return new objects (with the exception of `.sortInPlace()`).
+`fluent-sort` is a compact, dependency-free library (about 1.5kb gzipped) that provides a fluent API for sorting JavaScript arrays with a more sane API.
 
 ## Example
 
-```
+```javascript
 const testCases = [
-    {
-      id: 0,
-      name: "Strong Monster",
-      strength: 10,
-      agility: 5,
-      intelligence: 8,
-      monsterdexOrder: 5
-    },
-    {
-      id: 1,
-      name: "Fast Monster",
-      strength: 5,
-      agility: 10,
-      intelligence: 5,
-      monsterdexOrder: 1
-    },
-    {
-      id: 2,
-      name: "Mediocre Monster",
-      strength: 7.5,
-      agility: 7.5,
-      intelligence: 8,
-      monsterdexOrder: 6
-    },
-    {
-      id: 3,
-      name: "Unimpressive Monster",
-      strength: 2,
-      agility: 2,
-      intelligence: 2,
-      monsterdexOrder: 4
-    },
-    {
-      id: 4,
-      name: "Slow Monster",
-      strength: 7.5,
-      agility: 3,
-      intelligence: 8,
-      monsterdexOrder: 17
-    },
-    {
-      id: 5,
-      name: "Smart Monster",
-      strength: 3,
-      agility: 7.5,
-      intelligence: 15,
-      monsterdexOrder: 75
-    }
-  ];
+  {
+    id: 0,
+    name: "Strong Monster",
+    strength: 10,
+    agility: 5,
+    intelligence: 8,
+    monsterdexOrder: 5
+  },
+  {
+    id: 1,
+    name: "Fast Monster",
+    strength: 5,
+    agility: 10,
+    intelligence: 5,
+    monsterdexOrder: 1
+  },
+  {
+    id: 2,
+    name: "Mediocre Monster",
+    strength: 7.5,
+    agility: 7.5,
+    intelligence: 8,
+    monsterdexOrder: 6
+  },
+  {
+    id: 3,
+    name: "Unimpressive Monster",
+    strength: 2,
+    agility: 2,
+    intelligence: 2,
+    monsterdexOrder: 4
+  },
+  {
+    id: 4,
+    name: "Slow Monster",
+    strength: 7.5,
+    agility: 3,
+    intelligence: 8,
+    monsterdexOrder: 17
+  },
+  {
+    id: 5,
+    name: "Smart Monster",
+    strength: 3,
+    agility: 7.5,
+    intelligence: 15,
+    monsterdexOrder: 75
+  }
+];
 
-const sortedTests = fluentSort(testCases) // Returns the OrderableInitiator
-    .sortByField(x => x.intelligence) // Returns the Orderable
-    .thenByFieldDescending(y => y.agility) // Returns a new Orderable with both rules applied
-    .result(); // Evaluates and returns the result
+const secondTest = [...testCases];
+const thirdTestCase = [...testCases];
 
-console.log(sortedTests);
+const sortedTests = new FluentSortArray(...testCases) // Spreads the array to construct a new FluentSortArray using native Array constructor syntax
+  .sortBy(x => x.intelligence) // Returns the extended array
+  .thenBy(y => y.agility) // Returns the same extended array
+  .executeCompositeSort(); // Performs the sort and returns the extended array
+
+const secondTestFromFluent = FluentSortArray.fromArray(secondTest); // Constructs a new FluentSortArray from the array provided
+const thirdTestMakingFluent = FluentSortArray.makeFluent(thirdTestCase)
+  .sortBy(x => x.monsterdexOrder)
+  .executeCompositeSort(); // Mutates thirdTestCase into a FluentSortArray
+
+console.log(sortedTests.map(x => x.name).join(", "));
+console.log(secondTest.map(x => x.name).join(", "));
+console.log(secondTestFromFluent.map(x => x.name).join(", "));
+console.log(thirdTestCase.map(x => x.name).join(", "));
+console.log(thirdTestMakingFluent.map(x => x.name).join(", "));
+/*
+Unimpressive Monster, Fast Monster, Slow Monster, Strong Monster, Mediocre Monster, Smart Monster
+Strong Monster, Fast Monster, Mediocre Monster, Unimpressive Monster, Slow Monster, Smart Monster
+Strong Monster, Fast Monster, Mediocre Monster, Unimpressive Monster, Slow Monster, Smart Monster
+Fast Monster, Unimpressive Monster, Strong Monster, Mediocre Monster, Slow Monster, Smart Monster
+Fast Monster, Unimpressive Monster, Strong Monster, Mediocre Monster, Slow Monster, Smart Monster
+*/
 ```
 
 ## Classes
@@ -98,14 +115,14 @@ A wrapper around an array and a set of rules defining how the array is to be ord
 
 **Kind**: global class
 
-* [Orderable](#Orderable)
-  * [new Orderable(arr, comparators)](#new_Orderable_new)
-  * [.thenBy(comparator)](#Orderable+thenBy) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.thenByDescending(comparator)](#Orderable+thenByDescending) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.thenByField(selector)](#Orderable+thenByField) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.thenByFieldDescending(selector)](#Orderable+thenByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.result()](#Orderable+result) ⇒ <code>array</code>
-  * [.sortInPlace()](#Orderable+sortInPlace) ⇒ <code>array</code>
+- [Orderable](#Orderable)
+  - [new Orderable(arr, comparators)](#new_Orderable_new)
+  - [.thenBy(comparator)](#Orderable+thenBy) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.thenByDescending(comparator)](#Orderable+thenByDescending) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.thenByField(selector)](#Orderable+thenByField) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.thenByFieldDescending(selector)](#Orderable+thenByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.result()](#Orderable+result) ⇒ <code>array</code>
+  - [.sortInPlace()](#Orderable+sortInPlace) ⇒ <code>array</code>
 
 <a name="new_Orderable_new"></a>
 
@@ -194,12 +211,12 @@ A wrapper around an array, prepared to be ordered.
 
 **Kind**: global class
 
-* [OrderableInitiator](#OrderableInitiator)
-  * [new OrderableInitiator(arr)](#new_OrderableInitiator_new)
-  * [.sortBy(comparator)](#OrderableInitiator+sortBy) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.sortByDescending(comparator)](#OrderableInitiator+sortByDescending) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.sortByField(selector)](#OrderableInitiator+sortByField) ⇒ [<code>Orderable</code>](#Orderable)
-  * [.sortByFieldDescending(selector)](#OrderableInitiator+sortByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
+- [OrderableInitiator](#OrderableInitiator)
+  - [new OrderableInitiator(arr)](#new_OrderableInitiator_new)
+  - [.sortBy(comparator)](#OrderableInitiator+sortBy) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.sortByDescending(comparator)](#OrderableInitiator+sortByDescending) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.sortByField(selector)](#OrderableInitiator+sortByField) ⇒ [<code>Orderable</code>](#Orderable)
+  - [.sortByFieldDescending(selector)](#OrderableInitiator+sortByFieldDescending) ⇒ [<code>Orderable</code>](#Orderable)
 
 <a name="new_OrderableInitiator_new"></a>
 
