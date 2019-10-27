@@ -68,6 +68,17 @@ export class PureFluentSortArray extends FluentSortArray {
   executeCompositeSort() {
     return [...this].sort(composeSort(this.__comparators));
   }
+
+  static fromArray(arr) {
+    return new PureFluentSortArray(...arr);
+  }
+
+  static makeFluent(arr) {
+    arr.__proto__ = PureFluentSortArray;
+    arr.__comparators = [];
+
+    return arr;
+  }
 }
 
 export default PureFluentSortArray;

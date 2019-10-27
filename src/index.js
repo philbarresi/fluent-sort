@@ -67,6 +67,17 @@ export class FluentSortArray extends Array {
   executeCompositeSort() {
     return this.sort(composeSort(this.__comparators));
   }
+
+  static fromArray(arr) {
+    return new FluentSortArray(...arr);
+  }
+
+  static makeFluent(arr) {
+    arr.__proto__ = FluentSortArray.prototype;
+    arr.__comparators = [];
+
+    return arr;
+  }
 }
 
 export default FluentSortArray;
