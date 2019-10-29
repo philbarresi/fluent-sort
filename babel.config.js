@@ -9,5 +9,8 @@ module.exports = {
         }
       }
     ]
-  ]
+  ],
+  ignore: ["**/*.test.js"],
+
+  sourceMaps: true
 };
